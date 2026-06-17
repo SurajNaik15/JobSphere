@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # JobSphere – Your Gateway To Governance
 
 **Government Job Notification Analyzer | MCA Final Year Project**
@@ -163,3 +164,6 @@ Extracted data appears pre-filled in the form for admin review before saving.
 ---
 
 *Built for MCA Final Year Project | JobSphere v1.0*
+=======
+# JobSphere
+>>>>>>> e0e506629b69831a1a7b4b4e9f3fd1e20371e50a
