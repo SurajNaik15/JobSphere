@@ -1,0 +1,173 @@
+{% extends 'base.html' %}
+{% block title %}{{ job.title }}{% endblock %}
+
+{% block content %}
+
+<!-- Back button -->
+<div class="mb-3">
+    <a href="{{ url_for('jobs') }}" class="btn btn-sm btn-outline-secondary">
+        <i class="fa-solid fa-arrow-left me-1"></i> Back to Jobs
+    </a>
+</div>
+
+<div class="row g-4">
+
+    <!-- LEFT SIDE -->
+    <div class="col-lg-8">
+        <div class="card p-4">
+
+            <div class="d-flex justify-content-between align-items-start mb-3">
+
+                <span class="badge bg-primary fs-6">
+                    {{ job.category_name or 'General' }}
+                </span>
+
+                {% if job.last_date %}
+                <span class="text-muted small">
+                    <i class="fa-regular fa-clock me-1"></i>
+                    Last Date:
+                    <strong
+                        class="{% if job.last_date < today %}text-danger{% endif %}">
+                        {{ job.last_date }}
+                    </strong>
+                </span>
+                {% endif %}
+
+            </div>
+
+            <h4 class="fw-bold mb-3">{{ job.title }}</h4>
+
+            <div class="row g-3">
+
+                {% if job.qualification %}
+                <div class="col-md-6">
+                    <div class="detail-item">
+                        <span class="detail-label">
+                            <i class="fa-solid fa-graduation-cap me-2 text-primary"></i>
+                            Qualification
+                        </span>
+                        <span class="detail-value">
+                            {{ job.qualification }}
+                        </span>
+                    </div>
+                </div>
+                {% endif %}
+
+                {% if job.age_limit %}
+                <div class="col-md-6">
+                    <div class="detail-item">
+                        <span class="detail-label">
+                            <i class="fa-solid fa-person me-2 text-info"></i>
+                            Age Limit
+                        </span>
+                        <span class="detail-value">
+                            {{ job.age_limit }}
+                        </span>
+                    </div>
+                </div>
+                {% endif %}
+
+                {% if job.salary %}
+                <div class="col-md-6">
+                    <div class="detail-item">
+                        <span class="detail-label">
+                            <i class="fa-solid fa-indian-rupee-sign me-2 text-success"></i>
+                            Salary / Pay Scale
+                        </span>
+                        <span class="detail-value">
+                            {{ job.salary }}
+                        </span>
+                    </div>
+                </div>
+                {% endif %}
+
+                {% if job.last_date %}
+                <div class="col-md-6">
+                    <div class="detail-item">
+                        <span class="detail-label">
+                            <i class="fa-solid fa-calendar-xmark me-2 text-danger"></i>
+                            Application Deadline
+                        </span>
+                        <span class="detail-value
+                            {% if job.last_date < today %}text-danger fw-semibold{% endif %}">
+                            {{ job.last_date }}
+                        </span>
+                    </div>
+                </div>
+                {% endif %}
+
+            </div>
+
+            <p class="text-muted small mt-3 mb-0">
+                Posted on:
+                {{ job.posted_at.strftime('%d %b %Y') if job.posted_at else 'N/A' }}
+            </p>
+
+        </div>
+    </div>
+
+    <!-- RIGHT SIDE -->
+    <div class="col-lg-4">
+
+        <div class="card p-4 mb-3">
+            <h6 class="fw-bold mb-3">Actions</h6>
+
+            <div class="d-grid gap-2">
+
+                {% if job.apply_link %}
+                <a href="{{ job.apply_link }}" target="_blank" class="btn btn-primary">
+                    <i class="fa-solid fa-external-link me-2"></i>
+                    Apply on Official Website
+                </a>
+                {% endif %}
+
+                {% if is_applied %}
+                <button class="btn btn-success disabled">
+                    <i class="fa-solid fa-check me-2"></i>Marked as Applied
+                </button>
+                {% else %}
+                <a href="{{ url_for('mark_applied', job_id=job.id) }}"
+                   class="btn btn-outline-success">
+                    <i class="fa-solid fa-check me-2"></i>Mark as Applied
+                </a>
+                {% endif %}
+
+                {% if is_saved %}
+                <a href="{{ url_for('unsave_job', job_id=job.id) }}"
+                   class="btn btn-warning">
+                    <i class="fa-solid fa-bookmark me-2"></i>Remove from Saved
+                </a>
+                {% else %}
+                <a href="{{ url_for('save_job', job_id=job.id) }}"
+                   class="btn btn-outline-secondary">
+                    <i class="fa-regular fa-bookmark me-2"></i>Save Job
+                </a>
+                {% endif %}
+
+                {% if job.pdf_path %}
+                <a href="{{ url_for('serve_pdf', filename=job.pdf_path) }}"
+                   target="_blank"
+                   class="btn btn-outline-danger">
+                    <i class="fa-solid fa-file-pdf me-2"></i>
+                    View PDF Notification
+                </a>
+                {% endif %}
+
+            </div>
+        </div>
+
+        {% if job.pdf_path %}
+        <div class="card p-3">
+            <p class="small text-muted mb-0">
+                <i class="fa-solid fa-circle-info me-1 text-info"></i>
+                This job was extracted from an official PDF notification.
+                Always verify on the official website before applying.
+            </p>
+        </div>
+        {% endif %}
+
+    </div>
+
+</div>
+
+{% endblock %}

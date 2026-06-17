@@ -1,0 +1,102 @@
+{% extends 'base.html' %}
+{% block title %}Browse Jobs{% endblock %}
+
+{% block content %}
+
+<div class="page-header">
+    <h4 class="fw-bold mb-1">Browse Government Jobs</h4>
+    <p class="text-muted small mb-0">Find the right opportunity for you</p>
+</div>
+
+<div class="filter-panel mb-4">
+    <form method="GET" action="{{ url_for('jobs') }}">
+        <div class="row g-2 align-items-end">
+
+            <div class="col-md-4">
+                <label class="form-label small fw-semibold mb-1">Search</label>
+                <input type="text" name="search" class="form-control"
+                       placeholder="Job title..." value="{{ search }}">
+            </div>
+
+            <div class="col-md-3">
+                <label class="form-label small fw-semibold mb-1">Category</label>
+                <select name="category" class="form-select">
+                    <option value="">All Categories</option>
+                    {% for cat in categories %}
+                    <option value="{{ cat.name }}" {% if selected_category == cat.name %}selected{% endif %}>
+                        {{ cat.name }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="col-md-3">
+                <input type="text" name="qualification" class="form-control"
+                       placeholder="Qualification" value="{{ request.args.get('qualification','') }}">
+            </div>
+
+            <div class="col-md-2">
+                <button class="btn btn-primary w-100">
+                    Filter
+                </button>
+            </div>
+
+        </div>
+    </form>
+</div>
+
+<p class="text-muted small mb-3">
+    <strong>{{ job_list|length }}</strong> jobs found
+</p>
+
+{% if job_list %}
+<div class="row g-3">
+
+    {% for job in job_list %}
+    <div class="col-md-6 col-lg-4">
+        <div class="job-card h-100">
+
+            <span class="badge bg-primary mb-2">{{ job.category_name }}</span>
+
+            <h6 class="job-title">{{ job.title }}</h6>
+
+            <div class="job-meta">
+
+                {% if job.qualification %}
+                <div class="job-meta-item">
+                    {{ job.qualification[:60] }}
+                </div>
+                {% endif %}
+
+                {% if job.salary %}
+                <div class="job-meta-item">
+                    {{ job.salary }}
+                </div>
+                {% endif %}
+
+                {% if job.last_date %}
+                <div class="job-meta-item {% if job.last_date < today %}text-danger{% endif %}">
+                    Last Date: {{ job.last_date }}
+                </div>
+                {% endif %}
+
+            </div>
+
+            <a href="{{ url_for('job_detail', job_id=job.id) }}"
+               class="btn btn-sm btn-outline-primary mt-2">
+                View Details
+            </a>
+
+        </div>
+    </div>
+    {% endfor %}
+
+</div>
+
+{% else %}
+<div class="text-center py-5 text-muted">
+    <h6>No jobs found</h6>
+</div>
+{% endif %}
+
+{% endblock %}

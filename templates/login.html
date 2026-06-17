@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+{% block title %}Login{% endblock %}
+
+{# No sidebar on login page #}
+{% block sidebar %}{% endblock %}
+
+{% block content %}
+
+<!-- Login Page Wrapper -->
+<div class="auth-page d-flex align-items-center justify-content-center">
+
+    <div class="auth-card p-4 shadow-sm">
+
+        <!-- Header -->
+        <div class="text-center mb-4">
+            <div class="auth-icon mb-2">
+                <i class="fa-solid fa-landmark"></i>
+            </div>
+            <h4 class="fw-bold mb-1">Welcome Back</h4>
+            <p class="text-muted small mb-0">
+                Login to access your JobSphere account
+            </p>
+        </div>
+
+        <!-- Form -->
+        <form action="{{ url_for('login') }}" method="POST">
+
+            <div class="mb-3">
+                <label class="form-label small fw-semibold">Email Address</label>
+                <input type="email" name="email"
+                       class="form-control auth-input"
+                       placeholder="Enter your email"
+                       required>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label small fw-semibold">Password</label>
+                <input type="password" name="password"
+                       class="form-control auth-input"
+                       placeholder="Enter your password"
+                       required>
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100 auth-btn">
+                <i class="fa-solid fa-arrow-right-to-bracket me-2"></i>
+                Login
+            </button>
+        </form>
+
+        <!-- Links -->
+        <div class="text-center mt-3">
+            <p class="small text-muted mb-2">
+                New to JobSphere?
+                <a href="{{ url_for('register') }}" class="auth-link">Create account</a>
+            </p>
+
+            <hr>
+
+            <p class="small text-muted mb-0">
+                Admin?
+                <a href="{{ url_for('admin_login') }}" class="auth-link">Admin Login</a>
+            </p>
+        </div>
+
+    </div>
+</div>
+
+{% endblock %}

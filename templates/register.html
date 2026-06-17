@@ -1,0 +1,108 @@
+{% extends 'base.html' %}
+{% block title %}Register{% endblock %}
+
+{# No sidebar on register page #}
+{% block sidebar %}{% endblock %}
+
+{% block content %}
+
+<!-- Auth wrapper -->
+<div class="auth-page d-flex align-items-center justify-content-center">
+
+    <div class="auth-card p-4 shadow-sm">
+
+        <!-- Header -->
+        <div class="text-center mb-4">
+            <div class="auth-icon mb-2">
+                <i class="fa-solid fa-user-plus"></i>
+            </div>
+            <h4 class="fw-bold mb-1">Create Account</h4>
+            <p class="text-muted small mb-0">
+                Join JobSphere and track government jobs easily
+            </p>
+        </div>
+
+        <!-- Form -->
+        <form action="{{ url_for('register') }}" method="POST">
+
+            <div class="mb-3">
+                <label class="form-label small fw-semibold">Full Name</label>
+                <input type="text" name="full_name"
+                       class="form-control auth-input"
+                       placeholder="Enter your full name"
+                       required>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label small fw-semibold">Email Address</label>
+                <input type="email" name="email"
+                       class="form-control auth-input"
+                       placeholder="your@email.com"
+                       required>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label small fw-semibold">Password</label>
+                <input type="password" name="password"
+                       class="form-control auth-input"
+                       placeholder="Create password (min 6 chars)"
+                       minlength="6"
+                       required>
+            </div>
+
+            <!-- Qualification -->
+            <div class="mb-3">
+                <label class="form-label small fw-semibold">Highest Qualification</label>
+                <select name="qualification" class="form-select auth-input" required>
+                    <option value="">-- Select Qualification --</option>
+                    <option>10th Pass</option>
+                    <option>12th Pass</option>
+                    <option>ITI</option>
+                    <option>Diploma</option>
+                    <option>Graduate (B.A / B.Sc / B.Com)</option>
+                    <option>B.Tech / B.E</option>
+                    <option>MCA</option>
+                    <option>MBA</option>
+                    <option>Post Graduate</option>
+                </select>
+            </div>
+
+            <!-- DOB + Age -->
+            <div class="row">
+                <div class="col-8 mb-3">
+                    <label class="form-label small fw-semibold">Date of Birth</label>
+                    <input type="date" name="date_of_birth"
+                           class="form-control auth-input"
+                           required>
+                </div>
+
+                <div class="col-4 mb-3">
+                    <label class="form-label small fw-semibold">Age</label>
+                    <input type="number" name="age"
+                           class="form-control auth-input"
+                           min="18" max="60"
+                           placeholder="Age"
+                           required>
+                </div>
+            </div>
+
+            <!-- Submit -->
+            <button type="submit" class="btn btn-primary w-100 auth-btn">
+                <i class="fa-solid fa-user-plus me-2"></i>Register
+            </button>
+
+        </form>
+
+        <!-- Footer -->
+        <div class="text-center mt-3">
+            <p class="small text-muted mb-0">
+                Already have an account?
+                <a href="{{ url_for('login') }}" class="auth-link">Login here</a>
+            </p>
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

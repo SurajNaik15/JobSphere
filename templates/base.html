@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>{% block title %}JobSphere{% endblock %} - JobSphere</title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
+
+    {% block extra_css %}{% endblock %}
+</head>
+
+<body class="bg-light">
+
+<!-- ================= NAVBAR ================= -->
+<nav class="navbar navbar-expand-lg navbar-dark top-navbar shadow-sm">
+
+    <div class="container-fluid px-4">
+
+        <a class="navbar-brand fw-bold" href="{{ url_for('index') }}">
+            <i class="fa-solid fa-landmark me-2"></i>JobSphere
+        </a>
+
+        <span class="navbar-text text-white-50 d-none d-lg-block small">
+            Your Gateway To Governance
+        </span>
+
+        <div class="ms-auto d-flex align-items-center gap-2">
+
+            {% if session.get('user_name') %}
+
+                <span class="text-white-50 small">
+                    <i class="fa-solid fa-user me-1"></i>
+                    {{ session['user_name'] }}
+                </span>
+
+                <a href="{{ url_for('logout') }}" class="btn btn-sm btn-outline-light">
+                    Logout
+                </a>
+
+            {% elif session.get('admin_name') %}
+
+                <span class="text-white-50 small">
+                    <i class="fa-solid fa-shield me-1"></i>
+                    Admin
+                </span>
+
+                <a href="{{ url_for('admin_logout') }}" class="btn btn-sm btn-outline-light">
+                    Logout
+                </a>
+
+            {% else %}
+
+                <a href="{{ url_for('login') }}" class="btn btn-sm btn-outline-light">
+                    Login
+                </a>
+
+                <a href="{{ url_for('register') }}" class="btn btn-sm btn-light text-primary fw-semibold">
+                    Register
+                </a>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+</nav>
+
+<!-- ================= PAGE LAYOUT ================= -->
+<div class="d-flex min-vh-100">
+
+    <!-- SIDEBAR -->
+    {% block sidebar %}
+    <aside class="sidebar d-none d-lg-flex flex-column">
+
+        <nav class="sidebar-nav mt-3">
+
+            {% if session.get('user_id') %}
+
+                <a href="{{ url_for('dashboard') }}"
+                   class="sidebar-link {% if request.endpoint == 'dashboard' %}active{% endif %}">
+                    <i class="fa-solid fa-gauge"></i> Dashboard
+                </a>
+
+                <a href="{{ url_for('jobs') }}"
+                   class="sidebar-link {% if request.endpoint == 'jobs' %}active{% endif %}">
+                    <i class="fa-solid fa-briefcase"></i> Browse Jobs
+                </a>
+
+                <a href="{{ url_for('saved_jobs') }}"
+                   class="sidebar-link {% if request.endpoint == 'saved_jobs' %}active{% endif %}">
+                    <i class="fa-solid fa-bookmark"></i> Saved Jobs
+                </a>
+
+                <a href="{{ url_for('applied_jobs') }}"
+                   class="sidebar-link {% if request.endpoint == 'applied_jobs' %}active{% endif %}">
+                    <i class="fa-solid fa-file-check"></i> Applied Jobs
+                </a>
+
+                <a href="{{ url_for('profile') }}"
+                   class="sidebar-link {% if request.endpoint == 'profile' %}active{% endif %}">
+                    <i class="fa-solid fa-user-pen"></i> My Profile
+                </a>
+
+            {% elif session.get('admin_id') %}
+
+                <a href="{{ url_for('admin_dashboard') }}"
+                   class="sidebar-link {% if request.endpoint == 'admin_dashboard' %}active{% endif %}">
+                    <i class="fa-solid fa-gauge"></i> Dashboard
+                </a>
+
+                <a href="{{ url_for('admin_jobs') }}"
+                   class="sidebar-link {% if request.endpoint == 'admin_jobs' %}active{% endif %}">
+                    <i class="fa-solid fa-list"></i> Manage Jobs
+                </a>
+
+                <a href="{{ url_for('add_job') }}"
+                   class="sidebar-link {% if request.endpoint == 'add_job' %}active{% endif %}">
+                    <i class="fa-solid fa-plus-circle"></i> Add Job
+                </a>
+
+                <a href="{{ url_for('admin_users') }}"
+                   class="sidebar-link {% if request.endpoint == 'admin_users' %}active{% endif %}">
+                    <i class="fa-solid fa-users"></i> Users
+                </a>
+
+            {% endif %}
+
+        </nav>
+
+    </aside>
+    {% endblock %}
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content flex-grow-1 p-3 p-lg-4">
+
+        <!-- FLASH MESSAGES -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }} alert-dismissible fade show shadow-sm">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        {% block content %}{% endblock %}
+
+    </main>
+
+</div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+{% block extra_js %}{% endblock %}
+
+</body>
+</html>

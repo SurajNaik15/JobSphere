@@ -1,0 +1,116 @@
+{% extends 'base.html' %}
+{% block title %}My Profile{% endblock %}
+
+{% block content %}
+
+<div class="page-header">
+    <h4 class="fw-bold mb-1">
+        <i class="fa-solid fa-user-pen me-2 text-primary"></i>My Profile
+    </h4>
+    <p class="text-muted small mb-0">Update your personal information</p>
+</div>
+
+<div class="row g-4">
+
+    <!-- ===================================================
+         LEFT SIDE - EDIT FORM
+    ==================================================== -->
+    <div class="col-lg-7">
+        <div class="card p-4 profile-card">
+
+            <form action="{{ url_for('profile') }}" method="POST">
+
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">Full Name</label>
+                    <input type="text" name="full_name"
+                           class="form-control profile-input"
+                           value="{{ user.full_name }}"
+                           required>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">Email Address</label>
+                    <input type="email"
+                           class="form-control bg-light"
+                           value="{{ user.email }}"
+                           disabled>
+                    <small class="text-muted">Email cannot be changed.</small>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">Highest Qualification</label>
+                    <select name="qualification" class="form-select profile-input">
+
+                        {% set qualifications = [
+                            '10th Pass', '12th Pass', 'ITI', 'Diploma',
+                            'Graduate (B.A / B.Sc / B.Com)', 'B.Tech / B.E',
+                            'MCA', 'MBA', 'Post Graduate'
+                        ] %}
+
+                        {% for q in qualifications %}
+                        <option value="{{ q }}"
+                            {% if user.qualification == q %}selected{% endif %}>
+                            {{ q }}
+                        </option>
+                        {% endfor %}
+
+                    </select>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-8 mb-3">
+                        <label class="form-label fw-semibold">Date of Birth</label>
+                        <input type="date" name="date_of_birth"
+                               class="form-control profile-input"
+                               value="{{ user.date_of_birth.strftime('%Y-%m-%d') if user.date_of_birth else '' }}">
+                    </div>
+
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label fw-semibold">Age</label>
+                        <input type="number" name="age"
+                               class="form-control profile-input"
+                               value="{{ user.age }}"
+                               min="18" max="60">
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary w-100 profile-btn">
+                    <i class="fa-solid fa-save me-2"></i>Update Profile
+                </button>
+
+            </form>
+
+        </div>
+    </div>
+
+    <!-- ===================================================
+         RIGHT SIDE - SUMMARY CARD
+    ==================================================== -->
+    <div class="col-lg-5">
+        <div class="card p-4 text-center profile-summary">
+
+            <!-- Avatar -->
+            <div class="avatar-circle mb-3">
+                {{ user.full_name[0] if user.full_name else 'U' }}
+            </div>
+
+            <h5 class="fw-bold mb-1">{{ user.full_name }}</h5>
+            <p class="text-muted small mb-2">{{ user.email }}</p>
+
+            <span class="badge bg-light text-dark border">
+                {{ user.qualification or 'Not set' }}
+            </span>
+
+            <hr>
+
+            <p class="text-muted small mb-0">
+                Member since
+                {{ user.created_at.strftime('%b %Y') if user.created_at else 'N/A' }}
+            </p>
+
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}

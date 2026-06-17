@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+{% block title %}Applied Jobs{% endblock %}
+
+{% block content %}
+
+<div class="page-header">
+    <h4 class="fw-bold mb-1">
+        <i class="fa-solid fa-file-check me-2 text-success"></i>Applied Jobs
+    </h4>
+    <p class="text-muted small mb-0">Jobs you have marked as applied</p>
+</div>
+
+{% if jobs_list %}
+
+<div class="card">
+    <div class="table-responsive">
+        <table class="table table-hover mb-0">
+            <thead class="table-light">
+                <tr>
+                    <th class="ps-3">Job Title</th>
+                    <th>Category</th>
+                    <th>Salary</th>
+                    <th>Job Deadline</th>
+                    <th>Applied On</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for job in jobs_list %}
+                <tr>
+
+                    <td class="ps-3">
+                        <a href="{{ url_for('job_detail', job_id=job.id) }}"
+                           class="fw-semibold text-dark text-decoration-none">
+                            {{ job.title }}
+                        </a>
+                    </td>
+
+                    <td>
+                        <span class="badge bg-primary">
+                            {{ job.category_name or '-' }}
+                        </span>
+                    </td>
+
+                    <td class="text-muted small">
+                        {{ job.salary or '-' }}
+                    </td>
+
+                    <td>
+                        {% if job.last_date %}
+                            {# SAFE FIX: compare using 'today' from Flask context processor #}
+                            <span class="small {% if job.last_date < today %}text-danger{% else %}text-success{% endif %}">
+                                {{ job.last_date }}
+                            </span>
+                        {% else %}
+                            -
+                        {% endif %}
+                    </td>
+
+                    <td class="text-muted small">
+                        {{ job.applied_at.strftime('%d %b %Y') if job.applied_at else '-' }}
+                    </td>
+
+                    <td>
+                        <a href="{{ url_for('job_detail', job_id=job.id) }}"
+                           class="btn btn-sm btn-outline-primary">
+                            View
+                        </a>
+                    </td>
+
+                </tr>
+                {% endfor %}
+            </tbody>
+
+        </table>
+    </div>
+</div>
+
+{% else %}
+
+<div class="text-center py-5 text-muted">
+    <i class="fa-solid fa-file-circle-xmark fa-3x mb-3"></i>
+    <h6>No applications tracked yet</h6>
+    <p class="small">
+        When you apply for a job, click "Mark as Applied" to track it here.
+    </p>
+    <a href="{{ url_for('jobs') }}" class="btn btn-primary btn-sm">
+        Browse Jobs
+    </a>
+</div>
+
+{% endif %}
+
+{% endblock %}

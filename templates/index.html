@@ -1,0 +1,224 @@
+{% extends 'base.html' %}
+{% block title %}Home{% endblock %}
+
+{% block sidebar %}{% endblock %}
+
+{% block content %}
+
+<!-- HERO SECTION -->
+<div class="hero-section text-center mb-5">
+    <div class="container">
+
+        <h1 class="mb-3">
+            <i class="fa-solid fa-landmark me-2 text-primary"></i>
+            JobSphere
+        </h1>
+
+        <p class="lead text-muted mb-2">Your Gateway To Governance</p>
+
+        <p class="text-muted mb-4">
+            Discover government job opportunities across India. Stay informed, stay ahead.
+        </p>
+
+        <div class="d-flex justify-content-center gap-3 flex-wrap">
+            <a href="{{ url_for('register') }}" class="btn btn-primary btn-lg px-4">
+                <i class="fa-solid fa-user-plus me-2"></i>Get Started
+            </a>
+
+            <a href="{{ url_for('login') }}" class="btn btn-outline-primary btn-lg px-4">
+                <i class="fa-solid fa-arrow-right-to-bracket me-2"></i>Login
+            </a>
+        </div>
+
+    </div>
+</div>
+
+<!-- STATS -->
+<div class="container mb-5">
+    <div class="row g-3 justify-content-center">
+
+        <div class="col-6 col-md-3">
+            <div class="stat-card text-center">
+                <div class="stat-number">{{ total or 0 }}</div>
+                <div class="stat-label">Active Jobs</div>
+            </div>
+        </div>
+
+        <div class="col-6 col-md-3">
+            <div class="stat-card text-center">
+                <div class="stat-number">6</div>
+                <div class="stat-label">Categories</div>
+            </div>
+        </div>
+
+        <div class="col-6 col-md-3">
+            <div class="stat-card text-center">
+                <div class="stat-number">100%</div>
+                <div class="stat-label">Free to Use</div>
+            </div>
+        </div>
+
+        <div class="col-6 col-md-3">
+            <div class="stat-card text-center">
+                <div class="stat-number">Live</div>
+                <div class="stat-label">Updates</div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- CATEGORY SECTION -->
+<div class="container mb-5">
+
+    <h4 class="section-title mb-4">Browse by Category</h4>
+
+    {% set cat_icons = {
+        'UPSC': 'fa-building-columns',
+        'SSC': 'fa-graduation-cap',
+        'Railway': 'fa-train',
+        'ISRO': 'fa-satellite',
+        'PSU': 'fa-industry',
+        'State Government': 'fa-flag'
+    } %}
+
+    {% set cat_colors = {
+        'UPSC': 'primary',
+        'SSC': 'success',
+        'Railway': 'info',
+        'ISRO': 'warning',
+        'PSU': 'danger',
+        'State Government': 'secondary'
+    } %}
+
+    <div class="row g-3">
+
+        {% for cat, icon in cat_icons.items() %}
+        <div class="col-6 col-md-4 col-lg-2">
+
+            <div class="category-card text-center p-3">
+
+                <i class="fa-solid {{ icon }} fa-2x text-{{ cat_colors.get(cat, 'dark') }} mb-2 d-block"></i>
+
+                <span class="small fw-semibold">{{ cat }}</span>
+
+            </div>
+
+        </div>
+        {% endfor %}
+
+    </div>
+</div>
+
+<!-- RECENT JOBS -->
+<div class="container mb-5">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h4 class="section-title mb-0">Latest Job Notifications</h4>
+        <a href="{{ url_for('login') }}" class="btn btn-sm btn-outline-primary">View All</a>
+    </div>
+
+    <div class="row g-3">
+
+        {% for job in recent_jobs %}
+        <div class="col-md-6 col-lg-4">
+
+            <div class="job-card">
+
+                <div class="d-flex justify-content-between align-items-start mb-2">
+
+                    <span class="badge bg-primary">
+                        {{ job.category_name or 'General' }}
+                    </span>
+
+                    {% if job.last_date %}
+                    <small class="text-muted">
+                        <i class="fa-regular fa-clock me-1"></i>
+                        {{ job.last_date }}
+                    </small>
+                    {% endif %}
+
+                </div>
+
+                <h6 class="job-title">{{ job.title }}</h6>
+
+                <div class="job-meta">
+
+                    {% if job.qualification %}
+                    <div class="job-meta-item">
+                        <i class="fa-solid fa-graduation-cap"></i>
+                        {{ job.qualification[:50] }}{% if job.qualification|length > 50 %}...{% endif %}
+                    </div>
+                    {% endif %}
+
+                    {% if job.salary %}
+                    <div class="job-meta-item">
+                        <i class="fa-solid fa-indian-rupee-sign"></i>
+                        {{ job.salary }}
+                    </div>
+                    {% endif %}
+
+                </div>
+
+                <a href="{{ url_for('login') }}"
+                   class="btn btn-sm btn-outline-primary mt-2">
+                    View Details
+                </a>
+
+            </div>
+
+        </div>
+
+        {% else %}
+
+        <div class="col-12 text-center text-muted py-4">
+            <i class="fa-solid fa-folder-open fa-3x mb-3"></i>
+            <p>No jobs posted yet. Check back soon!</p>
+        </div>
+
+        {% endfor %}
+
+    </div>
+</div>
+
+<!-- FEATURES -->
+<div class="container mb-5">
+
+    <h4 class="section-title text-center mb-4">Why JobSphere?</h4>
+
+    <div class="row g-4">
+
+        <div class="col-md-4">
+            <div class="feature-card text-center p-4">
+                <i class="fa-solid fa-file-pdf fa-2x text-primary mb-3"></i>
+                <h6 class="fw-bold">PDF Notification Processing</h6>
+                <p class="text-muted small">
+                    Automatic extraction of recruitment details from PDFs.
+                </p>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="feature-card text-center p-4">
+                <i class="fa-solid fa-filter fa-2x text-success mb-3"></i>
+                <h6 class="fw-bold">Smart Filtering</h6>
+                <p class="text-muted small">
+                    Find jobs based on eligibility and category easily.
+                </p>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="feature-card text-center p-4">
+                <i class="fa-solid fa-bell fa-2x text-warning mb-3"></i>
+                <h6 class="fw-bold">Expiry Alerts</h6>
+                <p class="text-muted small">
+                    Never miss deadlines with 7-day alerts.
+                </p>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+{% endblock %}

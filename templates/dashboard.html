@@ -1,0 +1,165 @@
+{% extends 'base.html' %}
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+
+<!-- Page heading -->
+<div class="page-header">
+    <h4 class="fw-bold mb-1">
+        Hello, {{ session.get('user_name', 'User') }}
+        <i class="fa-solid fa-hand-wave text-warning"></i>
+    </h4>
+    <p class="text-muted small mb-0">
+        Here's what's happening with your job search today.
+    </p>
+</div>
+
+<!-- ===================================================
+     STATS CARDS
+==================================================== -->
+<div class="row g-3 mb-4">
+
+    <div class="col-6 col-lg-3">
+        <div class="info-card info-card-blue">
+            <div class="info-card-icon"><i class="fa-solid fa-"></i></div><!---briefcase-->
+            <div class="info-card-value">{{ total_jobs }}</div>
+            <div class="info-card-label">Available Jobs</div>
+        </div>
+    </div>
+
+    <div class="col-6 col-lg-3">
+        <div class="info-card info-card2-green">
+            <div class="info-card-icon"><i class="fa-solid fa-"></i></div><!---bookmark-->
+            <div class="info-card-value">{{ saved_count }}</div>
+            <div class="info-card-label">Saved Jobs</div>
+        </div>
+    </div>
+
+    <div class="col-6 col-lg-3">
+        <div class="info-card info-card-orange">
+            <div class="info-card-icon"><i class="fa-solid fa-check-circle"></i></div><!---check-circle-->
+            <div class="info-card-value">{{ applied_count }}</div>
+            <div class="info-card-label">Applied Jobs</div>
+        </div>
+    </div>
+
+    <div class="col-6 col-lg-3">
+        <div class="info-card info-card-red">
+            <div class="info-card-icon"><i class="fa-solid fa-fire"></i></div><!--check-circle-->
+            <div class="info-card-value">{{ expiring_soon|length }}</div>
+            <div class="info-card-label">Expiring Soon</div>
+        </div>
+    </div>
+
+</div>
+
+<!-- ===================================================
+     QUICK ACTIONS
+==================================================== -->
+<h5 class="fw-semibold mb-3">Quick Actions</h5>
+
+<div class="row g-3 mb-4">
+
+    <div class="col-6 col-md-3">
+        <a href="{{ url_for('jobs') }}" class="quick-action-btn text-center">
+            <i class="fa-solid fa- fa-lg text-primary mb-2 d-block"></i><!--magnifying-glass-->
+            <small class="fw-semibold text-dark">Browse Jobs</small>
+        </a>
+    </div>
+
+    <div class="col-6 col-md-3">
+        <a href="{{ url_for('saved_jobs') }}" class="quick-action-btn text-center">
+            <i class="fa-solid fa- fa-lg text-success mb-2 d-block"></i><!--bookmark-->
+            <small class="fw-semibold text-dark">Saved Jobs</small>
+        </a>
+    </div>
+
+    <div class="col-6 col-md-3">
+        <a href="{{ url_for('applied_jobs') }}" class="quick-action-btn text-center">
+            <i class="fa-solid fa- fa-lg text-warning mb-2 d-block"></i><!--file-alt-->
+            <small class="fw-semibold text-dark">Applied Jobs</small>
+        </a>
+    </div>
+
+    <div class="col-6 col-md-3">
+        <a href="{{ url_for('profile') }}" class="quick-action-btn text-center">
+            <i class="fa-solid fa- fa-lg text-info mb-2 d-block"></i><!--user-pen-->
+            <small class="fw-semibold text-dark">Edit Profile</small>
+        </a>
+    </div>
+
+</div>
+
+<!-- ===================================================
+     JOBS CLOSING SOON
+==================================================== -->
+<div class="card">
+
+    <div class="card-header bg-white">
+        <h6 class="fw-bold mb-0 text-danger">
+            <i class="fa-solid fa-triangle-exclamation me-2"></i>
+            Closing Soon (Next 7 Days)
+        </h6>
+    </div>
+
+    <div class="card-body p-0">
+
+        {% if expiring_soon %}
+
+        <div class="table-responsive">
+            <table class="table table-hover mb-0">
+
+                <thead class="table-light">
+                    <tr>
+                        <th class="ps-3">Job Title</th>
+                        <th>Category</th>
+                        <th>Last Date</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for job in expiring_soon %}
+                    <tr>
+                        <td class="ps-3 fw-semibold small">
+                            {{ job.title }}
+                        </td>
+
+                        <td>
+                            <span class="badge bg-secondary">
+                                {{ job.category_name or '-' }}
+                            </span>
+                        </td>
+
+                        <td class="text-danger fw-semibold small">
+                            {{ job.last_date }}
+                        </td>
+
+                        <td>
+                            <a href="{{ url_for('job_detail', job_id=job.id) }}"
+                               class="btn btn-sm btn-outline-primary">
+                                View
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+
+            </table>
+        </div>
+
+        {% else %}
+
+        <div class="text-center py-4 text-muted">
+            <i class="fa-solid fa-calendar-check fa-2x mb-2"></i>
+            <p class="small mb-0">
+                No jobs expiring in the next 7 days. You're good!
+            </p>
+        </div>
+
+        {% endif %}
+
+    </div>
+</div>
+
+{% endblock %}
