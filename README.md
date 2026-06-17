@@ -1,7 +1,7 @@
 <<<<<<< HEAD
 # JobSphere – Your Gateway To Governance
 
-**Government Job Notification Analyzer | MCA Final Year Project**
+**Government Job Notification Analyzer | MCA First Year Project**
 
 ---
 
